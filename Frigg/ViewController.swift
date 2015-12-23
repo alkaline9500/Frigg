@@ -26,13 +26,14 @@ class ViewController: UIViewController {
     }
 
     @IBAction func didToggleGarage(sender: UIButton) {
-        manager.toggleGarage { success in
-            if success {
-                self.statusLabel.text = "Success"
+        manager.toggleGarage { response in
+            if response.success {
+                self.statusLabel.textColor = UIColor.blackColor()
             }
             else {
-                self.statusLabel.text = "Failure"
+                self.statusLabel.textColor = UIColor.redColor()
             }
+            self.statusLabel.text = response.text
         }
     }
 
