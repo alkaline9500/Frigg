@@ -21,7 +21,7 @@ class ValhallaAPIManager {
         static let CommandKeyName = "command"
         static let SuccessKeyName = "success"
         static let ResponseTextKeyName = "response"
-        static let GarageValueName = "toggle"
+        static let GarageValueName = "garage"
     }
     
     var apiKey: String? = nil {
