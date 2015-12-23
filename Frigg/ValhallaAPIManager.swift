@@ -20,6 +20,7 @@ class ValhallaAPIManager {
         static let APIKeyName = "valhalla_key"
         static let CommandKeyName = "command"
         static let SuccessKeyName = "success"
+        static let ResponseTextKeyName = "response"
         static let GarageValueName = "toggle"
     }
     
@@ -51,7 +52,7 @@ class ValhallaAPIManager {
         Alamofire.request(.POST, "https://bluefile.org/share/valhalla.php", parameters: parameters, encoding: ParameterEncoding.URL, headers: nil)
         .responseJSON { response in
             // Check connection
-            guard response.result.error != nil else {
+            guard response.result.error == nil else {
                 let valhallaResponse = ValhallaAPIResponse(success: false, text: "Can't connect, check connection.")
                 completion(valhallaResponse)
                 return
@@ -64,7 +65,12 @@ class ValhallaAPIManager {
                 return
             }
             
-            // Check success
+            // Check response text
+            var responseText = "Server OK."
+            if let serverResponseText = responseJSON[Constants.ResponseTextKeyName] as? String {
+                responseText = serverResponseText
+            }
+            
             guard let success = responseJSON[Constants.SuccessKeyName] as? Bool else {
                 let valhallaResponse = ValhallaAPIResponse(success: false, text: "Bad server data.")
                 completion(valhallaResponse)
@@ -72,7 +78,7 @@ class ValhallaAPIManager {
             }
             
             // Call completion
-            let valhallaResponse = ValhallaAPIResponse(success: success, text: "Server accepted.")
+            let valhallaResponse = ValhallaAPIResponse(success: success, text: responseText)
             completion(valhallaResponse)
         }
     }
