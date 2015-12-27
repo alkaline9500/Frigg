@@ -63,7 +63,9 @@ class ViewController: UIViewController {
             }
             alertController.addAction(resetAction)
             
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { _ in
+                self.authKeyButton.enabled = true
+            }
             alertController.addAction(cancelAction)
             
             presentViewController(alertController, animated: true, completion: nil)
@@ -77,8 +79,8 @@ class ViewController: UIViewController {
     }
 
     func didReleaseButton(sender: UIButton) {
-        updateButtonColor()
         resetTimer()
+        updateButtonColor()
     }
     
     func incrementColor() {
