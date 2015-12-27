@@ -28,6 +28,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         resetButton()
         resetTimer()
+        if manager.apiKey == nil {
+            statusLabel.text = "Request an API key."
+        }
         garageButton.addTarget(self, action: "didDownButton:", forControlEvents: UIControlEvents.TouchDown)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
