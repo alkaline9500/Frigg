@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ValhallaAPIManager.swift
 //  Frigg
 //
 //  Created by Nicolas Manoogian on 12/22/15.

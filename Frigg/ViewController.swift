@@ -34,6 +34,9 @@ class ViewController: UIViewController {
         garageButton.addTarget(self, action: "didDownButton:", forControlEvents: UIControlEvents.TouchDown)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        garageButton.layer.cornerRadius = garageButton.layer.frame.size.height / 2.0
+        garageButton.clipsToBounds = true
+        
         updateAuthButtonText()
     }
     
@@ -42,9 +45,11 @@ class ViewController: UIViewController {
     @IBAction func setAuthKey(sender: UIButton) {
         authKeyButton.enabled = false
         if manager.apiKey == nil {
+            // Request access
             manager.requestAccess(updateAuthButton)
         }
         else {
+            // Reset key
             let alertController = UIAlertController(title: "Reset Key?", message: "Once you reset your key, you'll need to request a new one to access the server.", preferredStyle: .Alert)
             
             let resetAction = UIAlertAction(title: "Reset", style: .Destructive) { _ in
@@ -117,7 +122,6 @@ class ViewController: UIViewController {
     
     private func resetButton() {
         currentBlue = 0.0
-        garageButton.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
     }
     
     private func resetTimer() {
