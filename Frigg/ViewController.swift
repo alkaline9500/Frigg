@@ -45,7 +45,17 @@ class ViewController: UIViewController {
             manager.requestAccess(updateAuthButton)
         }
         else {
-            manager.resetKey(updateAuthButton)
+            let alertController = UIAlertController(title: "Reset Key?", message: "Once you reset your key, you'll need to request a new one to access the server.", preferredStyle: .Alert)
+            
+            let resetAction = UIAlertAction(title: "Reset", style: .Destructive) { _ in
+                self.manager.resetKey(self.updateAuthButton)
+            }
+            alertController.addAction(resetAction)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            presentViewController(alertController, animated: true, completion: nil)
         }
     }
     
