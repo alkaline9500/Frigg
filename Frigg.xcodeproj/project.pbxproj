@@ -13,6 +13,9 @@
 		6A0CC6261C29FEA8002A99C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A0CC6251C29FEA8002A99C2 /* Assets.xcassets */; };
 		6A0CC6291C29FEA8002A99C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A0CC6271C29FEA8002A99C2 /* LaunchScreen.storyboard */; };
 		6A9FA1F21C2A00B800B55ED6 /* ValhallaAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9FA1F11C2A00B800B55ED6 /* ValhallaAPIManager.swift */; };
+		6AD2A1BD1C3042AB00FA7FB3 /* SliderSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD2A1BC1C3042AB00FA7FB3 /* SliderSwitch.swift */; };
+		6AD2A1BF1C30548000FA7FB3 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD2A1BE1C30548000FA7FB3 /* Utility.swift */; };
+		6AD2A1C11C30572E00FA7FB3 /* UIColor+Interpolated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD2A1C01C30572E00FA7FB3 /* UIColor+Interpolated.swift */; };
 		EB46E264CC71AD7123A7C51D /* Pods_Frigg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75C89B8B649A909E3851EF83 /* Pods_Frigg.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +29,9 @@
 		6A0CC6281C29FEA8002A99C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A0CC62A1C29FEA8002A99C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A9FA1F11C2A00B800B55ED6 /* ValhallaAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValhallaAPIManager.swift; sourceTree = "<group>"; };
+		6AD2A1BC1C3042AB00FA7FB3 /* SliderSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderSwitch.swift; sourceTree = "<group>"; };
+		6AD2A1BE1C30548000FA7FB3 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		6AD2A1C01C30572E00FA7FB3 /* UIColor+Interpolated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Interpolated.swift"; sourceTree = "<group>"; };
 		75C89B8B649A909E3851EF83 /* Pods_Frigg.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Frigg.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4484308043190C6AB32C0B9 /* Pods-Frigg.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Frigg.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Frigg/Pods-Frigg.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,7 +80,10 @@
 			children = (
 				6A0CC61E1C29FEA8002A99C2 /* AppDelegate.swift */,
 				6A0CC6201C29FEA8002A99C2 /* ViewController.swift */,
+				6AD2A1BC1C3042AB00FA7FB3 /* SliderSwitch.swift */,
 				6A9FA1F11C2A00B800B55ED6 /* ValhallaAPIManager.swift */,
+				6AD2A1BE1C30548000FA7FB3 /* Utility.swift */,
+				6AD2A1C01C30572E00FA7FB3 /* UIColor+Interpolated.swift */,
 				6A0CC6221C29FEA8002A99C2 /* Main.storyboard */,
 				6A0CC6251C29FEA8002A99C2 /* Assets.xcassets */,
 				6A0CC6271C29FEA8002A99C2 /* LaunchScreen.storyboard */,
@@ -214,8 +223,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AD2A1BF1C30548000FA7FB3 /* Utility.swift in Sources */,
 				6A0CC6211C29FEA8002A99C2 /* ViewController.swift in Sources */,
+				6AD2A1C11C30572E00FA7FB3 /* UIColor+Interpolated.swift in Sources */,
 				6A9FA1F21C2A00B800B55ED6 /* ValhallaAPIManager.swift in Sources */,
+				6AD2A1BD1C3042AB00FA7FB3 /* SliderSwitch.swift in Sources */,
 				6A0CC61F1C29FEA8002A99C2 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

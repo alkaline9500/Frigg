@@ -26,21 +26,22 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="1k3-qG-9eA">
-                                <rect key="frame" x="200" y="182" width="200" height="235.5"/>
+                                <rect key="frame" x="125" y="245" width="350" height="110.5"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold Button" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u3c-FD-jHz">
-                                        <rect key="frame" x="0.0" y="0.0" width="200" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Drag to Control" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u3c-FD-jHz">
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkl-Kt-cDl">
-                                        <rect key="frame" x="0.0" y="35" width="200" height="200"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DaE-3I-Bsg" customClass="SliderSwitch" customModule="Frigg" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="35.5" width="350" height="75"/>
+                                        <color key="backgroundColor" red="0.3172426538933415" green="0.36640838515428498" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="200" id="DhC-cZ-zA9"/>
-                                            <constraint firstAttribute="width" constant="200" id="TXV-2X-icJ"/>
+                                            <constraint firstAttribute="width" constant="350" id="29J-pe-v7e"/>
+                                            <constraint firstAttribute="height" constant="75" id="Zcx-lF-DKl"/>
                                         </constraints>
-                                    </button>
+                                    </view>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -54,12 +55,13 @@
                     </view>
                     <connections>
                         <outlet property="authKeyButton" destination="BDe-85-VhI" id="h8O-mQ-9Lu"/>
-                        <outlet property="garageButton" destination="hkl-Kt-cDl" id="GxK-b1-xzg"/>
+                        <outlet property="sliderSwitch" destination="DaE-3I-Bsg" id="3RJ-tP-t1C"/>
                         <outlet property="statusLabel" destination="u3c-FD-jHz" id="a0o-5k-CEJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="325" y="352"/>
         </scene>
     </scenes>
 </document>
