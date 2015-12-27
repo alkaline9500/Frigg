@@ -31,14 +31,27 @@ class ViewController: UIViewController {
         garageButton.addTarget(self, action: "didDownButton:", forControlEvents: UIControlEvents.TouchDown)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        updateAuthButton()
     }
     
     // MARK: Button Actions
+    
+    @IBAction func setAuthKey(sender: UIButton) {
+        authKeyButton.enabled = false
+        if manager.apiKey == nil {
+            manager.requestAccess { response in
+                self.updateFromResponse(response)
+                self.authKeyButton.enabled = true
+            }
+        }
+        else {
+            manager.resetKey { response in
+                self.updateFromResponse(response)
+                self.authKeyButton.enabled = true
+            }
+        }
+        updateAuthButton()
+    }
     
     func didDownButton(sender: UIButton) {
         if colorTimer == nil {
@@ -56,29 +69,35 @@ class ViewController: UIViewController {
             self.resetTimer()
             garageButton.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
             manager.toggleGarage { response in
-                switch response {
-                case .ConnectionError:
-                    self.statusLabel.textColor = UIColor.redColor()
-                    self.statusLabel.text = "Connection Error"
-                case .NoAPIKey:
-                    self.statusLabel.textColor = UIColor.blackColor()
-                    self.statusLabel.text = "Request an API Key"
-                case .ServerError:
-                    self.statusLabel.textColor = UIColor.redColor()
-                    self.statusLabel.text = "Server Error"
-                case let .Success(data: data):
-                    self.statusLabel.textColor = UIColor.blackColor()
-                    self.statusLabel.text = data
-                case let .Failure(reason: reason):
-                    self.statusLabel.textColor = UIColor.redColor()
-                    self.statusLabel.text = reason
-                }
+                self.updateFromResponse(response)
                 self.resetButton()
             }
             return
         }
         currentBlue += 0.05
         holdTime -= 0.1
+    }
+    
+    // MARK: Helper Methods
+    
+    private func updateFromResponse(response: ValhallaAPIResponse) {
+        switch response {
+        case .ConnectionError:
+            self.statusLabel.textColor = UIColor.redColor()
+            self.statusLabel.text = "Connection Error"
+        case .NoAPIKey:
+            self.statusLabel.textColor = UIColor.blackColor()
+            self.statusLabel.text = "Request an API Key"
+        case .ServerError:
+            self.statusLabel.textColor = UIColor.redColor()
+            self.statusLabel.text = "Server Error"
+        case let .Success(data: data):
+            self.statusLabel.textColor = UIColor.blackColor()
+            self.statusLabel.text = data
+        case let .Failure(reason: reason):
+            self.statusLabel.textColor = UIColor.redColor()
+            self.statusLabel.text = reason
+        }
     }
     
     private func resetButton() {
@@ -91,26 +110,14 @@ class ViewController: UIViewController {
         colorTimer = nil
         holdTime = 3.0
     }
-
-    @IBAction func setAuthKey(sender: UIButton) {
-        let alertController = UIAlertController(title: "Set Authentication Key", message: nil, preferredStyle: .Alert)
-        alertController.addTextFieldWithConfigurationHandler { textField in
-            textField.text = self.manager.apiKey
+    
+    private func updateAuthButton() {
+        if manager.apiKey != nil {
+            self.authKeyButton.setTitle("Reset Key", forState: .Normal)
         }
-        
-        let setKeyAction = UIAlertAction(title: "Save", style: .Default) { _ in
-            guard let textField = alertController.textFields?.first else {
-                assert(false, "")
-            }
-            self.manager.apiKey = textField.text
+        else {
+            self.authKeyButton.setTitle("Request Access", forState: .Normal)
         }
-        
-        alertController.addAction(setKeyAction)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        
-        presentViewController(alertController, animated: true, completion: nil)
     }
 }
 

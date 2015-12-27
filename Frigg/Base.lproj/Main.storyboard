@@ -19,8 +19,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BDe-85-VhI">
-                                <rect key="frame" x="482" y="30" width="88" height="30"/>
-                                <state key="normal" title="Set Auth Key"/>
+                                <rect key="frame" x="460" y="30" width="110" height="30"/>
+                                <state key="normal" title="Request Access"/>
                                 <connections>
                                     <action selector="setAuthKey:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2KV-HQ-Jlk"/>
                                 </connections>
@@ -35,7 +35,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkl-Kt-cDl">
-                                        <rect key="frame" x="0.0" y="35.5" width="200" height="200"/>
+                                        <rect key="frame" x="0.0" y="35" width="200" height="200"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="200" id="DhC-cZ-zA9"/>
                                             <constraint firstAttribute="width" constant="200" id="TXV-2X-icJ"/>

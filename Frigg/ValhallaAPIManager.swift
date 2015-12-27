@@ -14,13 +14,14 @@ enum ValhallaAPIResponse {
     case ConnectionError
     case ServerError
     case Failure(reason: String)
-    case Success(data: String?)
+    case Success(data: String)
 }
 
 class ValhallaAPIManager {
     struct Constants {
         static let APIUrl = "https://bluefile.org/share/valhalla.php"
         static let APIKeyName = "valhalla_key"
+        static let AuthorizeKeyName = "authorize"
         static let CommandKeyName = "command"
         static let SuccessKeyName = "success"
         static let ResponseTextKeyName = "response"
@@ -37,6 +38,55 @@ class ValhallaAPIManager {
     init() {
         let defaults = NSUserDefaults.standardUserDefaults()
         apiKey = defaults.stringForKey(Constants.APIKeyName)
+    }
+    
+    func resetKey(completion: (ValhallaAPIResponse -> Void)) {
+        self.apiKey = nil
+        completion(.Success(data: "Reset key"))
+        // TODO: API call to remove from server
+    }
+    
+    func requestAccess(completion: (ValhallaAPIResponse -> Void)) {
+        let parameters = [
+            Constants.AuthorizeKeyName : 1
+        ]
+
+        Alamofire.request(.POST, Constants.APIUrl, parameters: parameters, encoding: ParameterEncoding.URL, headers: nil)
+            .responseJSON { response in
+                // Check connection
+                guard response.result.error == nil else {
+                    completion(.ConnectionError)
+                    return
+                }
+                
+                // Check JSON
+                guard let responseJSON = response.result.value as? NSDictionary else {
+                    completion(.ServerError)
+                    return
+                }
+                
+                // Check success
+                guard responseJSON[Constants.SuccessKeyName] as? Bool == true else {
+                    completion(.ServerError)
+                    return
+                }
+                
+                // Check new key
+                guard let newAPIKey = responseJSON[Constants.APIKeyName] as? String else {
+                    completion(.ServerError)
+                    return
+                }
+                
+                // Check response
+                guard let serverResponseText = responseJSON[Constants.ResponseTextKeyName] as? String else {
+                    completion(.ServerError)
+                    return
+                }
+
+                // Update key
+                self.apiKey = newAPIKey
+                completion(.Success(data: serverResponseText))
+        }
     }
 
     
@@ -55,15 +105,13 @@ class ValhallaAPIManager {
         .responseJSON { response in
             // Check connection
             guard response.result.error == nil else {
-                let valhallaResponse = ValhallaAPIResponse.ConnectionError
-                completion(valhallaResponse)
+                completion(.ConnectionError)
                 return
             }
             
             // Check JSON
             guard let responseJSON = response.result.value as? NSDictionary else {
-                let valhallaResponse = ValhallaAPIResponse.ServerError
-                completion(valhallaResponse)
+                completion(.ServerError)
                 return
             }
             
@@ -74,16 +122,16 @@ class ValhallaAPIManager {
             }
             
             guard let success = responseJSON[Constants.SuccessKeyName] as? Bool else {
-                completion(ValhallaAPIResponse.ServerError)
+                completion(.ServerError)
                 return
             }
             
             // Call completion
             if success {
-                completion(ValhallaAPIResponse.Success(data: responseText))
+                completion(.Success(data: responseText))
             }
             else {
-                completion(ValhallaAPIResponse.Failure(reason: responseText))
+                completion(.Failure(reason: responseText))
             }
         }
     }
