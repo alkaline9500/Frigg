@@ -48,7 +48,7 @@ class ValhallaAPIManager {
     
     func requestAccess(completion: (ValhallaAPIResponse -> Void)) {
         let parameters = [
-            Constants.AuthorizeKeyName : 1
+            Constants.AuthorizeKeyName : UIDevice.currentDevice().name
         ]
 
         Alamofire.request(.POST, Constants.APIUrl, parameters: parameters, encoding: ParameterEncoding.URL, headers: nil)

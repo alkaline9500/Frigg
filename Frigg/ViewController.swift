@@ -85,6 +85,7 @@ class ViewController: UIViewController {
         if percentDone >= 1.0 {
             resetTimer()
             garageButton.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
+            self.statusLabel.textColor = UIColor.blackColor()
             self.statusLabel.text = "..."
             self.garageButton.enabled = false
             manager.toggleGarage { response in
