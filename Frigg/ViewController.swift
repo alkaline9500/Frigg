@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         garageButton.addTarget(self, action: "didDownButton:", forControlEvents: UIControlEvents.TouchDown)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        updateAuthButton()
+        updateAuthButtonText()
     }
     
     // MARK: Button Actions
@@ -39,18 +39,11 @@ class ViewController: UIViewController {
     @IBAction func setAuthKey(sender: UIButton) {
         authKeyButton.enabled = false
         if manager.apiKey == nil {
-            manager.requestAccess { response in
-                self.updateFromResponse(response)
-                self.authKeyButton.enabled = true
-            }
+            manager.requestAccess(updateAuthButton)
         }
         else {
-            manager.resetKey { response in
-                self.updateFromResponse(response)
-                self.authKeyButton.enabled = true
-            }
+            manager.resetKey(updateAuthButton)
         }
-        updateAuthButton()
     }
     
     func didDownButton(sender: UIButton) {
@@ -66,9 +59,12 @@ class ViewController: UIViewController {
     
     func incrementColor() {
         if holdTime <= 0.0 {
-            self.resetTimer()
+            resetTimer()
             garageButton.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
+            self.statusLabel.text = "..."
+            self.garageButton.enabled = false
             manager.toggleGarage { response in
+                self.garageButton.enabled = true
                 self.updateFromResponse(response)
                 self.resetButton()
             }
@@ -80,17 +76,23 @@ class ViewController: UIViewController {
     
     // MARK: Helper Methods
     
+    private func updateAuthButton(response: ValhallaAPIResponse) {
+        updateFromResponse(response)
+        authKeyButton.enabled = true
+        updateAuthButtonText()
+    }
+    
     private func updateFromResponse(response: ValhallaAPIResponse) {
         switch response {
         case .ConnectionError:
             self.statusLabel.textColor = UIColor.redColor()
-            self.statusLabel.text = "Connection Error"
+            self.statusLabel.text = "Connection error."
         case .NoAPIKey:
             self.statusLabel.textColor = UIColor.blackColor()
-            self.statusLabel.text = "Request an API Key"
+            self.statusLabel.text = "Request an API key."
         case .ServerError:
             self.statusLabel.textColor = UIColor.redColor()
-            self.statusLabel.text = "Server Error"
+            self.statusLabel.text = "Server error."
         case let .Success(data: data):
             self.statusLabel.textColor = UIColor.blackColor()
             self.statusLabel.text = data
@@ -111,7 +113,7 @@ class ViewController: UIViewController {
         holdTime = 3.0
     }
     
-    private func updateAuthButton() {
+    private func updateAuthButtonText() {
         if manager.apiKey != nil {
             self.authKeyButton.setTitle("Reset Key", forState: .Normal)
         }

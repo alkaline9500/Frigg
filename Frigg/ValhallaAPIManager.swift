@@ -42,7 +42,7 @@ class ValhallaAPIManager {
     
     func resetKey(completion: (ValhallaAPIResponse -> Void)) {
         self.apiKey = nil
-        completion(.Success(data: "Reset key"))
+        completion(.Success(data: "Key was reset."))
         // TODO: API call to remove from server
     }
     
@@ -116,11 +116,12 @@ class ValhallaAPIManager {
             }
             
             // Check response text
-            var responseText = "OK"
-            if let serverResponseText = responseJSON[Constants.ResponseTextKeyName] as? String {
-                responseText = serverResponseText
+            guard let serverResponseText = responseJSON[Constants.ResponseTextKeyName] as? String else {
+                completion(.ServerError)
+                return
             }
             
+            // Check success
             guard let success = responseJSON[Constants.SuccessKeyName] as? Bool else {
                 completion(.ServerError)
                 return
@@ -128,10 +129,10 @@ class ValhallaAPIManager {
             
             // Call completion
             if success {
-                completion(.Success(data: responseText))
+                completion(.Success(data: serverResponseText))
             }
             else {
-                completion(.Failure(reason: responseText))
+                completion(.Failure(reason: serverResponseText))
             }
         }
     }
