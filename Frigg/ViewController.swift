@@ -12,29 +12,35 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var authKeyButton: UIButton!
-    
     @IBOutlet weak var garageButton: UIButton!
+    
     let manager = ValhallaAPIManager()
     
     var colorTimer: NSTimer? = nil
-    var holdTime = 0.0
+    var percentDone = 0.0
     var currentBlue = 0.0 {
         didSet {
             garageButton.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: CGFloat(currentBlue), alpha: 1.0)
         }
     }
     
+    struct Constants {
+        static let PercentStep = 0.03
+        static let ButtonCornerRadiusScale: CGFloat = 0.5
+        static let BlueScaler = 0.8
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        resetButton()
         resetTimer()
+        updateButtonColor()
         if manager.apiKey == nil {
             statusLabel.text = "Request an API key."
         }
         garageButton.addTarget(self, action: "didDownButton:", forControlEvents: UIControlEvents.TouchDown)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
         garageButton.addTarget(self, action: "didReleaseButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        garageButton.layer.cornerRadius = garageButton.layer.frame.size.height / 2.0
+        garageButton.layer.cornerRadius = garageButton.layer.frame.size.height * Constants.ButtonCornerRadiusScale
         garageButton.clipsToBounds = true
         
         updateAuthButtonText()
@@ -71,12 +77,12 @@ class ViewController: UIViewController {
     }
 
     func didReleaseButton(sender: UIButton) {
-        resetButton()
+        updateButtonColor()
         resetTimer()
     }
     
     func incrementColor() {
-        if holdTime <= 0.0 {
+        if percentDone >= 1.0 {
             resetTimer()
             garageButton.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
             self.statusLabel.text = "..."
@@ -84,12 +90,12 @@ class ViewController: UIViewController {
             manager.toggleGarage { response in
                 self.garageButton.enabled = true
                 self.updateFromResponse(response)
-                self.resetButton()
+                self.updateButtonColor()
             }
             return
         }
-        currentBlue += 0.05
-        holdTime -= 0.1
+        percentDone += Constants.PercentStep
+        updateButtonColor()
     }
     
     // MARK: Helper Methods
@@ -120,14 +126,14 @@ class ViewController: UIViewController {
         }
     }
     
-    private func resetButton() {
-        currentBlue = 0.0
+    private func updateButtonColor() {
+        currentBlue = percentDone * Constants.BlueScaler
     }
     
     private func resetTimer() {
         colorTimer?.invalidate()
         colorTimer = nil
-        holdTime = 3.0
+        percentDone = 0.0
     }
     
     private func updateAuthButtonText() {
