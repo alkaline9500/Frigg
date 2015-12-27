@@ -9,9 +9,12 @@
 import Foundation
 import Alamofire
 
-struct ValhallaAPIResponse {
-    let success: Bool
-    let text: String
+enum ValhallaAPIResponse {
+    case NoAPIKey
+    case ConnectionError
+    case ServerError
+    case Failure(reason: String)
+    case Success(data: String?)
 }
 
 class ValhallaAPIManager {
@@ -39,8 +42,7 @@ class ValhallaAPIManager {
     
     func toggleGarage(completion: (ValhallaAPIResponse -> Void)) {
         guard let apiKey = apiKey else {
-            let valhallaResponse = ValhallaAPIResponse(success: false, text: "No authentication key is set.")
-            completion(valhallaResponse)
+            completion(ValhallaAPIResponse.NoAPIKey)
             return
         }
         
@@ -49,37 +51,40 @@ class ValhallaAPIManager {
             Constants.CommandKeyName : Constants.GarageValueName
         ]
         
-        Alamofire.request(.POST, "https://bluefile.org/share/valhalla.php", parameters: parameters, encoding: ParameterEncoding.URL, headers: nil)
+        Alamofire.request(.POST, Constants.APIUrl, parameters: parameters, encoding: ParameterEncoding.URL, headers: nil)
         .responseJSON { response in
             // Check connection
             guard response.result.error == nil else {
-                let valhallaResponse = ValhallaAPIResponse(success: false, text: "Can't connect, check connection.")
+                let valhallaResponse = ValhallaAPIResponse.ConnectionError
                 completion(valhallaResponse)
                 return
             }
             
             // Check JSON
             guard let responseJSON = response.result.value as? NSDictionary else {
-                let valhallaResponse = ValhallaAPIResponse(success: false, text: "Bad server data.")
+                let valhallaResponse = ValhallaAPIResponse.ServerError
                 completion(valhallaResponse)
                 return
             }
             
             // Check response text
-            var responseText = "Server OK."
+            var responseText = "OK"
             if let serverResponseText = responseJSON[Constants.ResponseTextKeyName] as? String {
                 responseText = serverResponseText
             }
             
             guard let success = responseJSON[Constants.SuccessKeyName] as? Bool else {
-                let valhallaResponse = ValhallaAPIResponse(success: false, text: "Bad server data.")
-                completion(valhallaResponse)
+                completion(ValhallaAPIResponse.ServerError)
                 return
             }
             
             // Call completion
-            let valhallaResponse = ValhallaAPIResponse(success: success, text: responseText)
-            completion(valhallaResponse)
+            if success {
+                completion(ValhallaAPIResponse.Success(data: responseText))
+            }
+            else {
+                completion(ValhallaAPIResponse.Failure(reason: responseText))
+            }
         }
     }
 }

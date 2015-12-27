@@ -56,13 +56,23 @@ class ViewController: UIViewController {
             self.resetTimer()
             garageButton.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
             manager.toggleGarage { response in
-                if response.success {
-                    self.statusLabel.textColor = UIColor.blackColor()
-                }
-                else {
+                switch response {
+                case .ConnectionError:
                     self.statusLabel.textColor = UIColor.redColor()
+                    self.statusLabel.text = "Connection Error"
+                case .NoAPIKey:
+                    self.statusLabel.textColor = UIColor.blackColor()
+                    self.statusLabel.text = "Request an API Key"
+                case .ServerError:
+                    self.statusLabel.textColor = UIColor.redColor()
+                    self.statusLabel.text = "Server Error"
+                case let .Success(data: data):
+                    self.statusLabel.textColor = UIColor.blackColor()
+                    self.statusLabel.text = data
+                case let .Failure(reason: reason):
+                    self.statusLabel.textColor = UIColor.redColor()
+                    self.statusLabel.text = reason
                 }
-                self.statusLabel.text = response.text
                 self.resetButton()
             }
             return
