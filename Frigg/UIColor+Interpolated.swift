@@ -26,8 +26,8 @@ extension UIColor {
         endColor.getRed(&endRed, green: &endGreen, blue: &endBlue, alpha: &endAlpha)
         
         let newRed = (1.0 - adjustedPercent) * startRed + adjustedPercent * endRed
-        let newGreen = (1.0 - adjustedPercent) * startGreen + percent * endGreen
-        let newBlue = (1.0 - adjustedPercent) * startBlue + percent * endBlue
+        let newGreen = (1.0 - adjustedPercent) * startGreen + adjustedPercent * endGreen
+        let newBlue = (1.0 - adjustedPercent) * startBlue + adjustedPercent * endBlue
         
         return UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: endAlpha)
     }
