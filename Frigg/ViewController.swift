@@ -72,19 +72,18 @@ class ViewController: UIViewController {
     private func updateFromResponse(response: ValhallaAPIResponse) {
         switch response {
         case .ConnectionError:
-            self.statusLabel.textColor = UIColor.redColor()
+            self.sliderSwitch.state = .Error
             self.statusLabel.text = "Connection error."
         case .NoAPIKey:
-            self.statusLabel.textColor = UIColor.blackColor()
+            self.sliderSwitch.state = .Error
             self.statusLabel.text = "Request an API key."
         case .ServerError:
-            self.statusLabel.textColor = UIColor.redColor()
+            self.sliderSwitch.state = .Error
             self.statusLabel.text = "Server error."
         case let .Success(data: data):
-            self.statusLabel.textColor = UIColor.blackColor()
             self.statusLabel.text = data
         case let .Failure(reason: reason):
-            self.statusLabel.textColor = UIColor.redColor()
+            self.sliderSwitch.state = .Error
             self.statusLabel.text = reason
         }
     }

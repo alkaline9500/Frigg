@@ -29,7 +29,11 @@ class SliderSwitch: UIView {
     var onLatch: (Void -> Void)?
     var isPanning = false
     var enabled = true
-    var state = SliderSwitchState.Unlatched
+    var state = SliderSwitchState.Unlatched {
+        didSet {
+            updateColor(true)
+        }
+    }
     
     var percentDragged: CGFloat = 0.0 {
         didSet {
@@ -55,18 +59,15 @@ class SliderSwitch: UIView {
         pinView = UIView()
         panGestureRecognizer = UIPanGestureRecognizer()
         stateColorMap = [
-            .Unlatched : UIColor.blueColor(),
-            .Latched : UIColor.greenColor(),
-            .Error : UIColor.redColor()
+            .Unlatched : UIColor(red: 52.0/255.0, green: 152.0/255.0, blue: 219.0/255.0, alpha: 1.0),
+            .Latched : UIColor(red: 46.0/255.0, green: 204.0/255.0, blue: 113.0/255.0, alpha: 1.0),
+            .Error : UIColor(red: 231.0/255.0, green: 76.0/255.0, blue: 60.0/255.0, alpha: 1.0)
         ]
         super.init(coder: aDecoder)
         panGestureRecognizer.addTarget(self, action: "didPanPin:")
         pinView.addGestureRecognizer(panGestureRecognizer)
 
-        if let backgroundColor = backgroundColor {
-            setColor(backgroundColor, forState: .Unlatched)
-            updateColor()
-        }
+        updateColor(false)
 
         addSubview(pinView)
     }
@@ -83,8 +84,16 @@ class SliderSwitch: UIView {
         return currentColor
     }
     
-    private func updateColor() {
-        setColor(colorForState(state))
+    private func updateColor(animated: Bool) {
+        let colorChange = { self.setColor(self.colorForState(self.state)) }
+        if animated {
+            UIView.animateWithDuration(Constants.PinResetDuration) {
+                colorChange()
+            }
+        }
+        else {
+            colorChange()
+        }
     }
     
     private func setColor(color: UIColor) {
@@ -102,7 +111,7 @@ class SliderSwitch: UIView {
     
     private func setInterpolatedColor(startColor: UIColor, endColor: UIColor, percent: CGFloat) {
         let color = UIColor.colorFromInterpolation(startColor, endColor: endColor, percent: percent) { originalPercent in
-            return pow(originalPercent, 3.0)
+            return pow(originalPercent, 5.0)
         }
         setColor(color)
     }
