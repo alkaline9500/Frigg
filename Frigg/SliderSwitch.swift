@@ -111,7 +111,7 @@ class SliderSwitch: UIView {
     
     private func setInterpolatedColor(startColor: UIColor, endColor: UIColor, percent: CGFloat) {
         let color = UIColor.colorFromInterpolation(startColor, endColor: endColor, percent: percent) { originalPercent in
-            return pow(originalPercent, 5.0)
+            return pow(originalPercent, 3.0)
         }
         setColor(color)
     }
